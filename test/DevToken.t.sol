@@ -56,10 +56,10 @@ contract DtTest is Test {
     // Transfer Tests
     function testTransfer() public {
         uint256 transferAmount = 10 ether;
-        
+
         vm.prank(bob);
         bool success = developerToken.transfer(alice, transferAmount);
-        
+
         assertTrue(success);
         assertEq(developerToken.balanceOf(bob), STARTING_BALANCE - transferAmount);
         assertEq(developerToken.balanceOf(alice), transferAmount);
@@ -67,7 +67,7 @@ contract DtTest is Test {
 
     function testTransferFailsWithInsufficientBalance() public {
         uint256 transferAmount = STARTING_BALANCE + 1;
-        
+
         vm.prank(bob);
         vm.expectRevert();
         developerToken.transfer(alice, transferAmount);
@@ -81,7 +81,7 @@ contract DtTest is Test {
 
     function testTransferEmitsEvent() public {
         uint256 transferAmount = 10 ether;
-        
+
         vm.prank(bob);
         vm.expectEmit(true, true, false, true);
         emit Transfer(bob, alice, transferAmount);
@@ -91,17 +91,17 @@ contract DtTest is Test {
     // Approval Tests
     function testApprove() public {
         uint256 approvalAmount = 50 ether;
-        
+
         vm.prank(bob);
         bool success = developerToken.approve(alice, approvalAmount);
-        
+
         assertTrue(success);
         assertEq(developerToken.allowance(bob, alice), approvalAmount);
     }
 
     function testApproveEmitsEvent() public {
         uint256 approvalAmount = 50 ether;
-        
+
         vm.prank(bob);
         vm.expectEmit(true, true, false, true);
         emit Approval(bob, alice, approvalAmount);
@@ -112,15 +112,15 @@ contract DtTest is Test {
     function testTransferFrom() public {
         uint256 approvalAmount = 50 ether;
         uint256 transferAmount = 30 ether;
-        
+
         // Bob approves Alice to spend tokens
         vm.prank(bob);
         developerToken.approve(alice, approvalAmount);
-        
+
         // Alice transfers from Bob to Charlie
         vm.prank(alice);
         bool success = developerToken.transferFrom(bob, charlie, transferAmount);
-        
+
         assertTrue(success);
         assertEq(developerToken.balanceOf(bob), STARTING_BALANCE - transferAmount);
         assertEq(developerToken.balanceOf(charlie), transferAmount);
@@ -130,10 +130,10 @@ contract DtTest is Test {
     function testTransferFromFailsWithInsufficientAllowance() public {
         uint256 approvalAmount = 30 ether;
         uint256 transferAmount = 50 ether;
-        
+
         vm.prank(bob);
         developerToken.approve(alice, approvalAmount);
-        
+
         vm.prank(alice);
         vm.expectRevert();
         developerToken.transferFrom(bob, charlie, transferAmount);
@@ -141,10 +141,10 @@ contract DtTest is Test {
 
     function testTransferFromFailsWithInsufficientBalance() public {
         uint256 transferAmount = STARTING_BALANCE + 1;
-        
+
         vm.prank(bob);
         developerToken.approve(alice, transferAmount);
-        
+
         vm.prank(alice);
         vm.expectRevert();
         developerToken.transferFrom(bob, charlie, transferAmount);
@@ -153,10 +153,10 @@ contract DtTest is Test {
     function testTransferFromEmitsEvent() public {
         uint256 approvalAmount = 50 ether;
         uint256 transferAmount = 30 ether;
-        
+
         vm.prank(bob);
         developerToken.approve(alice, approvalAmount);
-        
+
         vm.prank(alice);
         vm.expectEmit(true, true, false, true);
         emit Transfer(bob, charlie, transferAmount);
@@ -167,7 +167,7 @@ contract DtTest is Test {
     function testTransferZeroAmount() public {
         vm.prank(bob);
         bool success = developerToken.transfer(alice, 0);
-        
+
         assertTrue(success);
         assertEq(developerToken.balanceOf(bob), STARTING_BALANCE);
         assertEq(developerToken.balanceOf(alice), 0);
@@ -176,7 +176,7 @@ contract DtTest is Test {
     function testApproveZeroAmount() public {
         vm.prank(bob);
         bool success = developerToken.approve(alice, 0);
-        
+
         assertTrue(success);
         assertEq(developerToken.allowance(bob, alice), 0);
     }
@@ -184,20 +184,20 @@ contract DtTest is Test {
     function testMultipleApprovals() public {
         vm.prank(bob);
         developerToken.approve(alice, 100 ether);
-        
+
         vm.prank(bob);
         developerToken.approve(alice, 50 ether);
-        
+
         assertEq(developerToken.allowance(bob, alice), 50 ether);
     }
 
     // Fuzz Tests
     function testFuzzTransfer(uint256 amount) public {
         amount = bound(amount, 0, STARTING_BALANCE);
-        
+
         vm.prank(bob);
         bool success = developerToken.transfer(alice, amount);
-        
+
         assertTrue(success);
         assertEq(developerToken.balanceOf(bob), STARTING_BALANCE - amount);
         assertEq(developerToken.balanceOf(alice), amount);
@@ -205,10 +205,10 @@ contract DtTest is Test {
 
     function testFuzzApprove(uint256 amount) public {
         amount = bound(amount, 0, type(uint256).max);
-        
+
         vm.prank(bob);
         bool success = developerToken.approve(alice, amount);
-        
+
         assertTrue(success);
         assertEq(developerToken.allowance(bob, alice), amount);
     }
