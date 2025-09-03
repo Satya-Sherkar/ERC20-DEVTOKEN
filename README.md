@@ -199,7 +199,6 @@ If you encounter any issues or have questions:
 ***
 
 **Disclaimer**: This is educational/development software. Always perform thorough testing and security audits before deploying to mainnet with real funds.
-<span style="display:none">[^1]</span>
 
 <div style="text-align: center">⁂</div>
 
